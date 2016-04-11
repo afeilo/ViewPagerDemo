@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private final String Tag = "MainActivity";
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.d(Tag,"currentPosition->"+position+""+viewPager.getChildAt(viewPager.getChildCount()-1).getLeft());
+                Toast.makeText(MainActivity.this,"第"+(position+1)+"页",Toast.LENGTH_SHORT).show();
             }
 
             @Override

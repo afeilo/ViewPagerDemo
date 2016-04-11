@@ -571,7 +571,6 @@ public class LoopViewPager extends ViewGroup{
                 }
                 requestLayout();
             } else {
-                Log.d("LoopViewPager","item2->"+item);
                 populate(item);
                 scrollToItem(item, smoothScroll, velocity, dispatchSelected);
             }
@@ -579,7 +578,6 @@ public class LoopViewPager extends ViewGroup{
 
         private void scrollToItem(int item, boolean smoothScroll, int velocity,
                                   boolean dispatchSelected) {
-            Log.d("LoopViewPager","item->"+item);
             final ItemInfo curInfo = infoForPosition(item);
             int destX = 0;
             if (curInfo != null) {
@@ -876,7 +874,6 @@ public class LoopViewPager extends ViewGroup{
                 setScrollState(SCROLL_STATE_IDLE);
                 return;
             }
-            Log.d("LoopViewPager","sx->"+sx+"--dx->"+dx);
             setScrollingCacheEnabled(true);
             setScrollState(SCROLL_STATE_SETTLING);
 
@@ -1060,9 +1057,6 @@ public class LoopViewPager extends ViewGroup{
             if (curItem == null && N > 0) {
                 curItem = addNewItem(mCurItem, curIndex);
             }
-            for (int i = 0;i<mItems.size();i++){
-                Log.d("LoopViewPager->",curIndex+"---"+mItems.get(i).toString());
-            }
             // Fill 3x the available width or up to the number of offscreen
             // pages requested to either side, whichever is larger.
             // If we have no current item we have no work to do.
@@ -1131,9 +1125,6 @@ public class LoopViewPager extends ViewGroup{
 //                        ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
 //                    }
 //                }
-                for (int i = 0;i<mItems.size();i++){
-                    Log.d("LoopViewPager", mItems.get(i).toString());
-                }
                 float extraWidthRight = curItem.widthFactor;
                 itemIndex = curIndex + 1;
                 if (extraWidthRight < 2.f) {
@@ -1673,7 +1664,6 @@ public class LoopViewPager extends ViewGroup{
                     if (!lp.isDecor && (ii = infoForChild(child)) != null) {
                         int loff = (int) (childWidth * ii.offset);
                         int childLeft = paddingLeft + loff;
-                        Log.d("LoopViewPager","off->"+childLeft);
                         int childTop = paddingTop;
                         if (lp.needsMeasure) {
                             // This was added during layout and needs measurement.
