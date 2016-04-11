@@ -580,10 +580,16 @@ public class LoopViewPager extends ViewGroup{
                                   boolean dispatchSelected) {
             final ItemInfo curInfo = infoForPosition(item);
             int destX = 0;
+            //这里做了更改
             if (curInfo != null) {
                 final int width = getClientWidth();
                 destX = (int) (width * curInfo.offset);
             }
+//            if (curInfo != null) {
+//                final int width = getClientWidth();
+//                destX = (int) (width * Math.max(mFirstOffset,
+//                        Math.min(curInfo.offset, mLastOffset)));
+//            }
             if (smoothScroll) {
                 smoothScrollTo(destX, 0, velocity);
                 if (dispatchSelected) {
@@ -1060,6 +1066,7 @@ public class LoopViewPager extends ViewGroup{
             // Fill 3x the available width or up to the number of offscreen
             // pages requested to either side, whichever is larger.
             // If we have no current item we have no work to do.
+            //这里做了更改，需要测量前一个和后一个position的item数据
             if (curItem != null) {
                 float extraWidthLeft = 0.f;
                 int itemIndex = curIndex - 1;
@@ -1096,35 +1103,6 @@ public class LoopViewPager extends ViewGroup{
                         ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
                     }
                 }
-//                for (int pos = mCurItem - 1;pos>0; pos--) {
-////                    if(pos<0)
-////                        pos+=N;
-//                    if (extraWidthLeft >= leftWidthNeeded&&pos<startPos) {
-//                        if (ii == null) {
-//                            break;
-//                        }
-//                        if (pos == ii.position && !ii.scrolling) {
-//                            mItems.remove(itemIndex);
-//                            mAdapter.destroyItem(this, pos, ii.object);
-//                            if (DEBUG) {
-//                                Log.i(TAG, "populate() - destroyItem() with pos: " + pos +
-//                                        " view: " + ((View) ii.object));
-//                            }
-//                            itemIndex--;
-//                            curIndex--;
-//                            ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
-//                        }
-//                    } else if (ii != null && pos == ii.position) {
-//                        extraWidthLeft += ii.widthFactor;
-//                        itemIndex--;
-//                        ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
-//                    } else {
-//                        ii = addNewItem(pos, itemIndex + 1);
-//                        extraWidthLeft += ii.widthFactor;
-//                        curIndex++;
-//                        ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
-//                    }
-//                }
                 float extraWidthRight = curItem.widthFactor;
                 itemIndex = curIndex + 1;
                 if (extraWidthRight < 2.f) {
@@ -2306,6 +2284,7 @@ public class LoopViewPager extends ViewGroup{
                 final float truncator = currentPage >= mCurItem ? 0.4f : 0.6f;
                 targetPage = (int) (currentPage + pageOffset + truncator);
             }
+            //这里做了更改
             targetPage=targetPage%(mAdapter.getCount());
 //            if (mItems.size() > 0) {
 //                final ItemInfo firstItem = mItems.get(0);
