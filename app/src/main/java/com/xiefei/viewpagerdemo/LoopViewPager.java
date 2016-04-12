@@ -56,13 +56,13 @@ import java.util.List;
  */
 public class LoopViewPager extends ViewGroup{
         private static final String TAG = "ViewPager";
-        private static final boolean DEBUG = false;
+        private static final boolean DEBUG = true;
 
         private static final boolean USE_CACHE = false;
 
-        private static final int DEFAULT_OFFSCREEN_PAGES = 1;
         private static final int MAX_SETTLE_DURATION = 600; // ms
-        private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
+    private static final int DEFAULT_OFFSCREEN_PAGES = 1;
+    private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
 
         private static final int DEFAULT_GUTTER_SIZE = 16; // dips
 
@@ -113,7 +113,7 @@ public class LoopViewPager extends ViewGroup{
 
         private Scroller mScroller;
         private boolean mIsScrollStarted;
-
+        private boolean scrollLeft = false;//是否向左滑动
         private PagerObserver mObserver;
 
         private int mPageMargin;
@@ -545,7 +545,6 @@ public class LoopViewPager extends ViewGroup{
                 setScrollingCacheEnabled(false);
                 return;
             }
-
             if (item < 0) {
                 item = 0;
             } else if (item >= mAdapter.getCount()) {
@@ -571,8 +570,8 @@ public class LoopViewPager extends ViewGroup{
                 }
                 requestLayout();
             } else {
-                populate(item);
                 scrollToItem(item, smoothScroll, velocity, dispatchSelected);
+                populate(item);
             }
         }
 
@@ -1049,15 +1048,23 @@ public class LoopViewPager extends ViewGroup{
             // Locate the currently focused item or add it if needed.
             int curIndex = -1;
             ItemInfo curItem = null;
+            if(scrollLeft)
             for (curIndex = 0; curIndex < mItems.size(); curIndex++) {
                 final ItemInfo ii = mItems.get(curIndex);
-//                if (ii.position >= mCurItem) {
                     if (ii.position == mCurItem)
                     {
                         curItem = ii;
                         break;
                     }
-//                }
+            }else{
+                for (curIndex = (mItems.size()-1); curIndex >=0; curIndex--) {
+                    final ItemInfo ii = mItems.get(curIndex);
+                    if (ii.position == mCurItem)
+                    {
+                        curItem = ii;
+                        break;
+                    }
+                }
             }
 
             if (curItem == null && N > 0) {
@@ -1430,10 +1437,19 @@ public class LoopViewPager extends ViewGroup{
         }
 
         ItemInfo infoForPosition(int position) {
-            for (int i = 0; i < mItems.size(); i++) {
-                ItemInfo ii = mItems.get(i);
-                if (ii.position == position) {
-                    return ii;
+            if(scrollLeft){
+                for (int i = 0; i < mItems.size(); i++) {
+                    ItemInfo ii = mItems.get(i);
+                    if (ii.position == position) {
+                        return ii;
+                    }
+                }
+            }else {
+                for (int i = (mItems.size()-1); i >=0; i--) {
+                    ItemInfo ii = mItems.get(i);
+                    if (ii.position == position) {
+                        return ii;
+                    }
                 }
             }
             return null;
@@ -2278,6 +2294,11 @@ public class LoopViewPager extends ViewGroup{
 
         private int determineTargetPage(int currentPage, float pageOffset, int velocity, int deltaX) {
             int targetPage;
+            //增加左右滑动的判断
+            if(velocity>0)
+                scrollLeft = true;
+            else
+                scrollLeft = false;
             if (Math.abs(deltaX) > mFlingDistance && Math.abs(velocity) > mMinimumVelocity) {
                 targetPage = velocity > 0 ? currentPage : currentPage + 1;
             } else {

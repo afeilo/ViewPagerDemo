@@ -37,6 +37,7 @@ public abstract class ImagePagerAdapter extends PagerAdapter{
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         preImageView = (ImageView) object;
+        Log.d(Tag,preImageView.toString());
         container.removeView(preImageView);
     }
 
