@@ -1082,8 +1082,11 @@ public class LoopViewPager extends ViewGroup{
                 final float leftWidthNeeded = clientWidth <= 0 ? 0 :
                         2.f - curItem.widthFactor + (float) getPaddingLeft() / (float) clientWidth;
                 for (int pos = mCurItem - 1;; pos--) {
-                    if(pos<0)
+                    if(pos<0){
+                        if(mAdapter.getCount()<2)
+                            break;
                         pos+=N;
+                    }
                     if (extraWidthLeft >= leftWidthNeeded) {
                         if (ii == null) {
                             break;
@@ -1117,8 +1120,11 @@ public class LoopViewPager extends ViewGroup{
                     final float rightWidthNeeded = clientWidth <= 0 ? 0 :
                             (float) getPaddingRight() / (float) clientWidth + 2.f;
                     for (int pos = mCurItem + 1;; pos++) {
-                        if(pos>=N)
+                        if(pos>=N){
+                            if(mAdapter.getCount()<2)
+                                break;
                             pos-=N;
+                        }
                         if (extraWidthRight >= rightWidthNeeded) {
                             if (ii == null) {
                                 break;
